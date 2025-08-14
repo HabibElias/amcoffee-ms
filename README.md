@@ -4,7 +4,6 @@ Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduct
 
 ## Setup
 
-
 ```bash
 # pnpm
 pnpm install
