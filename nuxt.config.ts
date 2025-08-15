@@ -1,4 +1,5 @@
 import tailwindcss from "@tailwindcss/vite";
+import { fileURLToPath } from "node:url";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -9,7 +10,12 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@nuxt/eslint",
     "shadcn-nuxt",
+    "motion-v/nuxt",
+    "@nuxtjs/color-mode",
   ],
+  colorMode: {
+    classSuffix: "",
+  },
   eslint: {
     config: {
       standalone: false,
@@ -28,11 +34,14 @@ export default defineNuxtConfig({
     prefix: "",
     /**
      * Directory that the component lives in.
-     * @default "./components/ui"
+     * @default "./app/components/ui"
      */
     componentDir: "./components/ui",
   },
   alias: {
     "@": ".",
+    "~": ".",
+    "images": fileURLToPath(new URL("./assets/images", import.meta.url)),
+
   },
 });
