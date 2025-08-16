@@ -1,13 +1,15 @@
 import antfu from "@antfu/eslint-config";
 
-// @ts-check
 import withNuxt from "./.nuxt/eslint.config.mjs";
+
+// @ts-check
 
 export default withNuxt(
   antfu(
     {
       type: "app",
       vue: true,
+      jsonc: true,
       typescript: true,
       formatters: true,
       stylistic: {
@@ -33,7 +35,11 @@ export default withNuxt(
         "unicorn/filename-case": [
           "error",
           {
-            case: "kebabCase",
+            cases: {
+              camelCase: true,
+              kebabCase: true,
+              pascalCase: true,
+            },
             ignore: ["README.md"],
           },
         ],

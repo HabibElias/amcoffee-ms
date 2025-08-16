@@ -5,22 +5,23 @@
 
   // Auto fix
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
-    "source.organizeImports": "always"
+    "source.fixAll.eslint": "always",
+    "source.organizeImports": "always",
+    "source.fixAll.ts": "always"
   },
 
   // Silent the stylistic rules in you IDE, but still auto fix them
   "eslint.rules.customizations": [
-    { "rule": "style/*", "severity": "warn", "fixable": true },
-    { "rule": "format/*", "severity": "warn", "fixable": true },
-    { "rule": "*-indent", "severity": "warn", "fixable": true },
-    { "rule": "*-spacing", "severity": "warn", "fixable": true },
-    { "rule": "*-spaces", "severity": "warn", "fixable": true },
-    { "rule": "*-order", "severity": "warn", "fixable": true },
-    { "rule": "*-dangle", "severity": "warn", "fixable": true },
-    { "rule": "*-newline", "severity": "warn", "fixable": true },
-    { "rule": "*quotes", "severity": "warn", "fixable": true },
-    { "rule": "*semi", "severity": "warn", "fixable": true }
+    { "rule": "style/*", "severity": "default", "fixable": true },
+    { "rule": "format/*", "severity": "default", "fixable": true },
+    { "rule": "*-indent", "severity": "default", "fixable": true },
+    { "rule": "*-spacing", "severity": "default", "fixable": true },
+    { "rule": "*-spaces", "severity": "default", "fixable": true },
+    { "rule": "*-order", "severity": "default", "fixable": true },
+    { "rule": "*-dangle", "severity": "default", "fixable": true },
+    { "rule": "*-newline", "severity": "default", "fixable": true },
+    { "rule": "*quotes", "severity": "default", "fixable": true },
+    { "rule": "*semi", "severity": "default", "fixable": true }
   ],
 
   // Enable eslint for all supported languages
@@ -49,6 +50,8 @@
   ],
   "cSpell.words": [
     "Nuxt",
+    "nuxtjs",
+    "reka",
     "shadcn",
     "vueuse"
   ]
