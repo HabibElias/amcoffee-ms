@@ -1,46 +1,67 @@
-# Nuxt Minimal Starter
+# AMCoffee Nuxt App
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+This is the AMCoffee management system, built with Nuxt 4, Drizzle ORM, Turso (SQLite), Tailwind CSS, and Shadcn UI. It provides a modern, full-stack solution for managing coffee shop operations.
 
-## Setup
+## Features
+
+- Nuxt 4 (Vue 3) with SSR
+- Drizzle ORM for database access
+- Turso (local SQLite) for development
+- Tailwind CSS for styling
+- Shadcn UI components
+- Color mode (dark/light)
+- Eslint & Husky for code quality
+
+## Getting Started
+
+### Install dependencies
 
 ```bash
-# pnpm
 pnpm install
 ```
 
-## Development Server
+### Development
 
-Start the development server on `http://localhost:3000`:
+Start the dev server (and local DB):
 
 ```bash
-# pnpm
 pnpm dev
 ```
 
-## Production
+Visit [http://localhost:3000](http://localhost:3000)
 
-Build the application for production:
+### Linting
 
 ```bash
-# pnpm
+pnpm lint
+```
+
+### Build for Production
+
+```bash
 pnpm build
 ```
 
-Locally preview production build:
+### Preview Production Build
 
 ```bash
-# npm
-npm run preview
-
-# pnpm
 pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## Project Structure
+
+- `app/` - Main app source (components, pages, layouts, plugins)
+- `lib/` - Auth, env, and utility helpers
+- `db/` - Drizzle ORM config, schema, and migrations
+- `public/` - Static assets
+
+## Database
+
+Uses Turso (local SQLite) for development. Migrations are managed with Drizzle Kit.
+
+## Useful Commands
+
+- `pnpm dev` - Start dev server and DB
+- `pnpm build` - Build for production
+- `pnpm preview` - Preview production build
+- `pnpm lint` - Run linter

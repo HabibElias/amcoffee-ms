@@ -1,3 +1,12 @@
+<script setup lang="ts">
+import { useAuthStore } from "~/stores/auth";
+
+import AuthButton from "../auth-button.vue";
+import UserAvatar from "./userAvatar.vue";
+
+const authStore = useAuthStore();
+</script>
+
 <template>
   <header class="flex items-center justify-between">
     <!-- logo -->
@@ -8,12 +17,10 @@
       >
     </NuxtLink>
 
-    <AppToggleColor />
-
-    <nav>
-      <UiButton class="bg-[#8B5C2A]">
-        SignIn <Icon name="ri:login-box-fill" size="18" />
-      </UiButton>
+    <nav class="flex items-center gap-10">
+      <AppToggleColor />
+      <UserAvatar v-if="!authStore.loading && authStore.user" />
+      <AuthButton v-else />
     </nav>
   </header>
 </template>
