@@ -5,7 +5,8 @@
   "packageManager": "pnpm@10.12.4+sha512.5ea8b0deed94ed68691c9bad4c955492705c5eeb8a87ef86bc62c74a26b037b08ff9570f108b2e4dbd1dd1a9186fea925e527f141c648e85af45631074680184",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "concurrently 'pnpm run dev:db' 'nuxt dev'",
+    "dev:db": "turso dev --db-file local.db",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
@@ -14,6 +15,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@libsql/client": "^0.15.11",
     "@nuxt/eslint": "1.7.1",
     "@nuxt/icon": "1.15.0",
     "@nuxt/image": "1.11.0",
@@ -22,6 +24,8 @@
     "@vueuse/core": "^13.6.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "concurrently": "^9.2.0",
+    "drizzle-orm": "^0.44.4",
     "eslint": "^9.32.0",
     "lucide-vue-next": "^0.539.0",
     "motion-v": "^1.7.0",
@@ -39,6 +43,7 @@
     "@antfu/eslint-config": "^5.2.1",
     "@iconify-json/ri": "^1.2.5",
     "@types/node": "^24.3.0",
+    "drizzle-kit": "^0.31.4",
     "eslint-plugin-format": "^1.0.1",
     "husky": "^9.1.7",
     "typescript": "^5.9.2"
