@@ -25,3 +25,5 @@ logs
 
 .swp
 local.db*
+
+pnpm-lock
