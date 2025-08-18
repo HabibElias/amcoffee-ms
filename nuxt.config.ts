@@ -1,5 +1,4 @@
 import tailwindcss from "@tailwindcss/vite";
-import { fileURLToPath } from "node:url";
 
 import "./lib/env";
 
@@ -14,6 +13,7 @@ export default defineNuxtConfig({
     "shadcn-nuxt",
     "motion-v/nuxt",
     "@nuxtjs/color-mode",
+    "@pinia/nuxt",
   ],
   colorMode: {
     classSuffix: "",
@@ -40,10 +40,11 @@ export default defineNuxtConfig({
      */
     componentDir: "./components/ui",
   },
-  alias: {
-    "@": ".",
-    "~": ".",
-    "images": fileURLToPath(new URL("./assets/images", import.meta.url)),
-
-  },
+  // alias: {
+  //   "@": ".",
+  //   "~": ".",
+  //   "images": fileURLToPath(new URL("./app/assets/images", import.meta.url)),
+  //   "style": fileURLToPath(new URL("./app/assets/style", import.meta.url)),
+  //   "data": fileURLToPath(new URL("./app/assets/other/data", import.meta.url)),
+  // },
 });

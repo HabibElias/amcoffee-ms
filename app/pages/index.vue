@@ -1,15 +1,29 @@
+<script setup lang="ts">
+import { NuxtLink } from "#components";
+
+import AuthButton from "../components/auth-button.vue";
+
+const authStore = useAuthStore();
+</script>
+
 <template>
-  <div>
-    <div class="text-center mt-10">
+  <div class="min-h-fit">
+    <div class="text-center min-h-fit mt-10">
       <h1 class="text-4xl font-bold mb-4">
         Welcome to Anno Macchiato MS
       </h1>
       <p class="text-lg font-medium">
         Streamline your day—manage orders, track daily logs, and keep Anno Coffee running smooth and strong!
       </p>
-      <UiButton class="bg-[#8B5C2A] mt-4">
-        SignIn <Icon name="ri:login-box-fill" size="18" />
-      </UiButton>
+      <div class="mt-4">
+        <NuxtLink
+          v-if="!authStore.loading && authStore.user"
+          class="bg-[#f8f5f2] dark:hover:bg-[#926b41] hover:bg-[#8B5C2A] hover:text-white duration-200 dark:bg-[#23201c] rounded-3xl px-5 py-3 mt-13" to="/dashboard"
+        >
+          GetStarted
+        </NuxtLink>
+        <AuthButton v-else />
+      </div>
     </div>
 
     <!-- hero -->

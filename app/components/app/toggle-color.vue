@@ -3,8 +3,14 @@ const colorMode = useColorMode();
 </script>
 
 <template>
-  <button @click="colorMode.preference = colorMode.preference === 'dark' ? 'light' : 'dark'">
-    <Motion :initial="{ scale: 1.5 }" :while-tap="{ scale: 0.9 }">
+  <button
+    class="cursor-pointer"
+    @click="colorMode.preference = colorMode.preference === 'dark' ? 'light' : 'dark'"
+  >
+    <Motion
+      class="*:flex *:items-center *:justify-center"
+      :initial="{ scale: 1.5 }" :while-tap="{ scale: 0.9 }"
+    >
       <span v-if="colorMode.preference === 'dark'">
         <Icon name="ri:moon-fill" />
       </span>
