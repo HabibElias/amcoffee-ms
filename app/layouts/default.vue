@@ -1,3 +1,9 @@
+<script lang="ts" setup>
+const authStore = useAuthStore();
+
+await authStore.init();
+</script>
+
 <template>
   <div class="container mx-auto font-[Josefin_Sans] text-[#8B5C2A] dark:text-white p-4">
     <AppHeader />
