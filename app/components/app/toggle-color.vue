@@ -12,10 +12,10 @@ const colorMode = useColorMode();
       :initial="{ scale: 1.5 }" :while-tap="{ scale: 0.9 }"
     >
       <span v-if="colorMode.preference === 'dark'">
-        <Icon name="ri:moon-fill" />
+        <Icon name="ri:moon-fill" data-allow-mismatch="class" />
       </span>
       <span v-else>
-        <Icon name="ri:sun-fill" />
+        <Icon name="ri:sun-fill" data-allow-mismatch="class" />
       </span>
     </Motion>
   </button>
