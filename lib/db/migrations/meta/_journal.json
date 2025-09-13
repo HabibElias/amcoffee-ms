@@ -22,6 +22,20 @@
       "when": 1755485731105,
       "tag": "0002_bright_hex",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1756051794141,
+      "tag": "0003_ambiguous_clea",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1756065425043,
+      "tag": "0004_amused_naoko",
+      "breakpoints": true
     }
   ]
 }
