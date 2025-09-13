@@ -29,7 +29,7 @@ const links = [
 </script>
 
 <template>
-  <div class="flex flex-col  md:flex-row min-h-screen">
+  <div class="flex flex-col md:flex-row min-h-[70vh]">
     <!-- Sidebar -->
     <nav
       class="w-full md:w-52 text-sm md:text-[1rem] relative dark:text-white shadow-[1px_2px_2px] dark:shadow-[#8B5C2A]/40 mt-4 md:fixed md:h-[70vh] gap-y-3 flex md:flex-col flex-row"
@@ -78,7 +78,7 @@ const links = [
     </nav>
     <!-- Page content -->
     <main class="flex-1 md:ml-52 p-4">
-      <slot />
+      <NuxtPage />
     </main>
   </div>
 </template>
