@@ -18,7 +18,7 @@ import { Label } from "@/components/ui/label";
 <template>
   <Dialog>
     <DialogTrigger as-child>
-      <UiButton variant="outline">
+      <UiButton>
         <PlusIcon />
         Add Order
       </UiButton>

@@ -50,7 +50,7 @@ function formatDate(date: number) {
           Orders by Date
         </h3>
         <ul class="space-y-2">
-          <li v-for="order in orders_by_date?.reverse()" :key="order.date" class="flex justify-between items-center p-2 bg-gray-100 dark:bg-gray-800 rounded">
+          <li v-for="order in orders_by_date?.reverse()" :key="order.date" class="flex justify-between items-center p-2 bg-gray-100 dark:bg-[#141414] rounded">
             <span>{{ formatDate(order.date) }}</span>
             <span class="font-bold">{{ order.count }}</span>
           </li>

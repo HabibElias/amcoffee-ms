@@ -3,7 +3,7 @@ import type { FetchError } from "ofetch";
 
 import { toTypedSchema } from "@vee-validate/zod";
 import { InsertMenuSchema } from "~~/lib/db/schema";
-import { Loader2, PlusIcon } from "lucide-vue-next";
+import { File, Loader2, Pen } from "lucide-vue-next";
 import { useForm } from "vee-validate";
 import { toast } from "vue-sonner";
 
@@ -35,14 +35,29 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+const props = defineProps<{
+  id: number;
+}>();
+
 const menuStore = useMenuStore();
+const menuItem = menuStore.getMenuItems().value?.find(item => item.id === props.id);
 
 const submitError = ref<string>("");
 const open = ref<boolean>();
 const loading = ref<boolean>(false);
 
+if (!menuItem) {
+  open.value = false;
+}
+
 const { handleSubmit, setErrors } = useForm({
   validationSchema: toTypedSchema(InsertMenuSchema),
+  initialValues: {
+    name: menuItem?.name,
+    price: menuItem?.price,
+    image: menuItem?.image,
+    type: menuItem?.type,
+  },
 });
 
 const onSubmit = handleSubmit(async (values) => {
@@ -53,8 +68,8 @@ const onSubmit = handleSubmit(async (values) => {
 
     await toast.promise(
       (async () => {
-        const inserted = await $fetch("/api/menu", {
-          method: "post",
+        const inserted = await $fetch(`/api/menu/${props.id}`, {
+          method: "PATCH",
           body: values,
         });
         // eslint-disable-next-line no-console
@@ -63,8 +78,8 @@ const onSubmit = handleSubmit(async (values) => {
       })(),
       {
         loading: "Loading...",
-        success: () => `menu item has been added`,
-        error: () => "Error",
+        success: () => `menu item has been updated`,
+        error: () => "Error, Something went wrong",
       },
     );
     menuStore.refreshMenuItems();
@@ -83,9 +98,11 @@ const onSubmit = handleSubmit(async (values) => {
 <template>
   <Dialog :open="open">
     <DialogTrigger as-child>
-      <UiButton>
-        <PlusIcon />
-        Add an Item
+      <UiButton
+        variant="outline" size="icon"
+        class="btn-dark"
+      >
+        <Pen />
       </UiButton>
     </DialogTrigger>
     <DialogContent class="sm:max-w-[425px] font-[poppins]">
@@ -95,9 +112,9 @@ const onSubmit = handleSubmit(async (values) => {
       </UiAlert>
       <form @submit.prevent="onSubmit">
         <DialogHeader>
-          <DialogTitle>Add a Menu Item</DialogTitle>
+          <DialogTitle>Edit a Menu Item</DialogTitle>
           <DialogDescription>
-            Fill the details and click the add button.
+            Edit the details and click the Save button.
           </DialogDescription>
         </DialogHeader>
         <div class="grid gap-4 py-4">
@@ -166,9 +183,9 @@ const onSubmit = handleSubmit(async (values) => {
             type="submit"
             :disabled="loading"
           >
-            <PlusIcon v-if="!loading" />
+            <File v-if="!loading" />
             <Loader2 v-else class="animate-spin" />
-            Add
+            Save
           </Button>
         </DialogFooter>
       </form>

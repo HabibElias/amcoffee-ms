@@ -32,7 +32,7 @@ const links = [
   <div class="flex flex-col md:flex-row min-h-[70vh]">
     <!-- Sidebar -->
     <nav
-      class="w-full md:w-52 text-sm md:text-[1rem] relative dark:text-white shadow-[1px_2px_2px] dark:shadow-[#8B5C2A]/40 mt-4 md:fixed md:h-[70vh] gap-y-3 flex md:flex-col flex-row"
+      class="w-full md:w-52 text-sm md:text-[1rem] md:min-h-100 relative dark:text-white shadow-[1px_2px_2px] dark:shadow-[#8B5C2A]/40 mt-4 md:sticky m-0 md:top-30 md:h-[70vh] gap-y-3 flex md:flex-col flex-row"
     >
       <NuxtLink
         v-for="link in links"
@@ -77,7 +77,7 @@ const links = [
       </div>
     </nav>
     <!-- Page content -->
-    <main class="flex-1 md:ml-52 p-4">
+    <main class="flex-1 p-4">
       <NuxtPage />
     </main>
   </div>

@@ -1,47 +1,34 @@
 <script lang="ts" setup>
 import { Loader2 } from "lucide-vue-next";
 
-const { data: menu, pending } = await useFetch("/api/menu");
+const menuStore = useMenuStore();
+
+if (!menuStore.getMenuItems().value) {
+  menuStore.init();
+}
 </script>
 
 <template>
-  <div v-if="pending" class="w-full h-[60%] flex items-center justify-center">
+  <div v-if="menuStore.pending" class="w-full h-[60%] flex items-center justify-center">
     <Loader2 class="animate-spin" />
   </div>
-  <div v-else>
+  <div v-else class="relative">
     <!-- header -->
-    <div class="flex items-center justify-between mb-6">
+    <div class="flex items-center justify-between mb-6 sticky py-3 top-30 z-20">
       <span class="text-2xl">Menu</span>
 
       <AppAddMenuDialog />
     </div>
     <div class="mt-3">
       <div
-        v-if="menu && menu.length > 0"
+        v-if="menuStore.getMenuItems().value && menuStore.getMenuItems().value!.length > 0"
         class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
       >
-        <Motion
-          v-for="item in menu"
+        <AppMenuCard
+          v-for="item in menuStore.getMenuItems().value"
           :key="item.id"
-          class="bg-white dark:bg-gray-800 rounded-lg shadow-xs hover:shadow-md duration-200 p-6 flex flex-1 flex-col"
-          :initial="{ opacity: 0, scale: 0.95 }"
-          :animate="{ opacity: 1, scale: 1 }"
-        >
-          <div class="flex flex-col items-start mb-2">
-            <img
-              :src="item.image ?? '/menu_placeholder.png'"
-              alt="image"
-              class="w-full h-50 mr-3 object-contain p-2 mb-3 rounded-lg dark:bg-gray-50/40 dark:invert"
-            >
-            <h3 class="text-lg font-semibold">
-              {{ item.name }}
-            </h3>
-          </div>
-          <p class="text-gray-400 mb-2">
-            {{ item.type }}
-          </p>
-          <span class="text-primary font-bold">{{ item.price }}$</span>
-        </Motion>
+          v-bind="item"
+        />
       </div>
       <Motion
         v-else
