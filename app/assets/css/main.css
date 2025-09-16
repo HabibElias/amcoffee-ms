@@ -4,6 +4,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
+.btn-dark {
+  @apply dark:bg-primary dark:text-secondary dark:hover:bg-primary-foreground dark:border-primary dark:hover:text-secondary-foreground;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

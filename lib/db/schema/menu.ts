@@ -1,3 +1,5 @@
+import type { InferSelectModel } from "drizzle-orm";
+
 import { int, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { createInsertSchema } from "drizzle-zod";
 
@@ -15,3 +17,5 @@ export const InsertMenuSchema = createInsertSchema(menu, {
   price: schema => schema.positive({ message: "Price must be positive" }),
   type: schema => schema.refine(val => ["food", "drink"].includes(val), { message: "Type must be either 'food' or 'drink'" }),
 }).omit({ id: true });
+
+export type Menu = InferSelectModel<typeof menu>;

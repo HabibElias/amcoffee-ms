@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+import { Toaster } from "@/components/ui/sonner";
+import "vue-sonner/style.css";
+
 const authStore = useAuthStore();
 
 await authStore.init();
@@ -6,6 +9,7 @@ await authStore.init();
 
 <template>
   <div class="container mx-auto font-[Josefin_Sans] text-[#8B5C2A] dark:text-white p-4">
+    <Toaster :rich-colors="true" />
     <AppHeader />
     <div class="min-h-fit">
       <slot />

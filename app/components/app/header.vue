@@ -8,7 +8,7 @@ const authStore = useAuthStore();
 </script>
 
 <template>
-  <header class="flex items-center justify-between">
+  <header class="flex items-center justify-between sticky top-0 z-20 backdrop-blur-sm">
     <!-- logo -->
     <NuxtLink to="/">
       <img

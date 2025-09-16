@@ -1,0 +1,31 @@
+import db from "~~/lib/db";
+import { menu } from "~~/lib/db/schema";
+import { eq } from "drizzle-orm";
+
+export default defineEventHandler(async (event) => {
+  if (!event.context.user) {
+    return sendError(event, createError({
+      statusCode: 401,
+      statusMessage: "Unauthorized",
+    }));
+  }
+
+  if (!event.context.params || typeof event.context.params.id === "undefined") {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Missing menu ID parameter",
+    });
+  }
+  const id = Number.parseInt(event.context.params.id) as number;
+
+  if (!Number.isInteger(id)) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "ID should be an integer",
+    });
+  }
+
+  const deletedMenuItems = await db.delete(menu).where(eq(menu.id, id)).returning();
+
+  return deletedMenuItems;
+});
