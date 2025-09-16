@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type { Menu } from "~~/lib/db/schema";
 import type { FetchError } from "ofetch";
 
 import { toTypedSchema } from "@vee-validate/zod";
@@ -40,25 +41,36 @@ const props = defineProps<{
 }>();
 
 const menuStore = useMenuStore();
-const menuItem = menuStore.getMenuItems().value?.find(item => item.id === props.id);
+const menuItem = ref<Menu | undefined>();
 
 const submitError = ref<string>("");
-const open = ref<boolean>();
+const open = ref<boolean>(); // default to true
 const loading = ref<boolean>(false);
 
-if (!menuItem) {
-  open.value = false;
-}
-
-const { handleSubmit, setErrors } = useForm({
+const { handleSubmit, setErrors, setValues } = useForm({
   validationSchema: toTypedSchema(InsertMenuSchema),
   initialValues: {
-    name: menuItem?.name,
-    price: menuItem?.price,
-    image: menuItem?.image,
-    type: menuItem?.type,
+    name: "",
+    price: 0,
+    image: "",
   },
 });
+
+function checkMenuItem() {
+  const found = menuStore.getMenuItems().value?.find(item => item.id === props.id);
+
+  if (!found) {
+    open.value = false;
+    return;
+  }
+  menuItem.value = found;
+  setValues({
+    name: found.name,
+    price: found.price,
+    image: found.image,
+    type: found.type,
+  });
+}
 
 const onSubmit = handleSubmit(async (values) => {
   try {
@@ -101,6 +113,7 @@ const onSubmit = handleSubmit(async (values) => {
       <UiButton
         variant="outline" size="icon"
         class="btn-dark"
+        @click="checkMenuItem"
       >
         <Pen />
       </UiButton>
