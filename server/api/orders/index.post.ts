@@ -1,15 +1,15 @@
 import db from "~~/lib/db";
-import { InsertMenuSchema, menu } from "~~/lib/db/schema";
+import { insertOrderItemSchema, order, orderItem } from "~~/lib/db/schema";
 
 export default defineEventHandler(async (event) => {
   if (!event.context.user) {
     return sendError(event, createError({
-      statusCode: 401,
+      status: 401,
       statusMessage: "Unauthorized",
     }));
   }
 
-  const result = await readValidatedBody(event, InsertMenuSchema.safeParse);
+  const result = await readValidatedBody(event, insertOrderItemSchema.safeParse);
 
   if (!result.success) {
     const statusMessage = result.error.issues.map(issue => `${issue.path.join("")}: ${issue.message}`).join("; ");
@@ -18,6 +18,7 @@ export default defineEventHandler(async (event) => {
       error[issue.path.join("")] = issue.message;
       return error;
     }, {} as Record<string, string>);
+
     return sendError(event, createError({
       statusCode: 422,
       statusMessage,
@@ -25,9 +26,13 @@ export default defineEventHandler(async (event) => {
     }));
   }
 
-  const [created] = await db.insert(menu).values({
-    ...result.data,
-  }).returning();
+  const [createdOrder] = await db.insert(order).values({ userId: event.context.user.id }).returning();
 
-  return created;
+  // Insert all order items
+  const orderItemsToInsert = result.data.orderItems.map(item => ({
+    ...item,
+    orderId: createdOrder.id,
+  }));
+  const createdItems = await db.insert(orderItem).values(orderItemsToInsert).returning();
+  return createdItems;
 });

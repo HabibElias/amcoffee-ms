@@ -26,6 +26,12 @@ const links = [
     isActive: (route: ReturnType<typeof useRoute>) => route.fullPath === "/dashboard/withdraw",
   },
 ];
+
+const menuStore = useMenuStore();
+
+if (!menuStore.getMenuItems().value) {
+  menuStore.init();
+}
 </script>
 
 <template>

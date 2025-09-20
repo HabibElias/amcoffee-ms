@@ -2,10 +2,6 @@
 import { Loader2 } from "lucide-vue-next";
 
 const menuStore = useMenuStore();
-
-if (!menuStore.getMenuItems().value) {
-  menuStore.init();
-}
 </script>
 
 <template>
