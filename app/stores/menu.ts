@@ -10,9 +10,13 @@ export const useMenuStore = defineStore("menuItemStore", () => {
   const pending = ref<boolean>(false);
   async function init() {
     pending.value = true;
-    const data = await $fetch("/api/menu");
+    const { data, error } = await useFetch<Menu[]>("/api/menu");
     pending.value = false;
-    menuItems.value = data;
+    if (error.value) {
+      toast.error("Failed to fetch menu items");
+      return;
+    }
+    menuItems.value = data.value ?? [];
   }
 
   const getMenuItems = () => menuItems;

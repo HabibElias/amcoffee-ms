@@ -48,10 +48,13 @@
     "postcss"
   ],
   "cSpell.words": [
+    "lucide",
     "Nuxt",
     "nuxtjs",
+    "ofetch",
     "reka",
     "shadcn",
+    "sonner",
     "vueuse"
   ]
 }
