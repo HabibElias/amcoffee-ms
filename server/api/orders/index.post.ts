@@ -1,5 +1,5 @@
 import db from "~~/lib/db";
-import { insertOrderSchema, order, orderItem } from "~~/lib/db/schema";
+import { insertOrderItemSchema, order, orderItem } from "~~/lib/db/schema";
 
 export default defineEventHandler(async (event) => {
   if (!event.context.user) {
@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     }));
   }
 
-  const result = await readValidatedBody(event, insertOrderSchema.safeParse);
+  const result = await readValidatedBody(event, insertOrderItemSchema.safeParse);
 
   if (!result.success) {
     const statusMessage = result.error.issues.map(issue => `${issue.path.join("")}: ${issue.message}`).join("; ");

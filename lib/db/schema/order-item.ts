@@ -22,6 +22,6 @@ export const orderItemSchema = createInsertSchema(orderItem)
     menuId: z.preprocess(val => Number(val), z.number()),
   });
 
-export const insertOrderSchema = z.object({
+export const insertOrderItemSchema = z.object({
   orderItems: z.array(orderItemSchema),
 });
