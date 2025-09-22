@@ -10,7 +10,8 @@ export default defineEventHandler(async () => {
     })
     .from(order)
     .groupBy(sql`DATE(${order.orderDate} / 1000, 'unixepoch', 'localtime')`)
-    .orderBy(desc(sql`DATE(${order.orderDate} / 1000, 'unixepoch', 'localtime')`));
+    .orderBy(desc(sql`DATE(${order.orderDate} / 1000, 'unixepoch', 'localtime')`))
+    .limit(10);
 
   return dailyOrders;
 });

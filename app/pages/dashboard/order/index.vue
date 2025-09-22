@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { Eye, Loader2 } from "lucide-vue-next";
 
-const { data: orders_by_date, pending } = await useFetch("/api/orders");
-const { data: today_orders, pending: today_pending } = await useFetch("/api/orders/today");
+const { data: orders_by_date, pending } = useFetch("/api/orders");
+const { data: today_orders, pending: today_pending } = useFetch("/api/orders/today");
 
 function formatDate(date: number) {
   const d = new Date(date);
@@ -49,7 +49,7 @@ function formatDate(date: number) {
           <li v-for="order in orders_by_date" :key="order.date" class="flex justify-between items-center p-2 bg-gray-100 dark:bg-[#141414] rounded group hover:bg-gray-200 dark:hover:bg-[#1a1a1a]">
             <span class="flex items-center gap-2">
               <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center">
-                <UiButton size="icon" variant="outline">
+                <UiButton size="icon" variant="outline" @click="navigateTo(`/dashboard/order/date/${order.date}`)">
                   <Eye />
                 </UiButton>
               </span>

@@ -2,7 +2,7 @@
 import type { FetchError } from "ofetch";
 
 import { toTypedSchema } from "@vee-validate/zod";
-import { ClipboardListIcon, ListRestart, Pen, PlusIcon, Save, Trash2 } from "lucide-vue-next";
+import { ClipboardListIcon, ListRestart, Loader2, Pen, PlusIcon, Save, Trash2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
 import { toast } from "vue-sonner";
 import z from "zod";
@@ -245,6 +245,9 @@ async function onAddSubmit() {
             }}
           </span>
         </div>
+      </div>
+      <div v-else-if="loading && orderItems.length <= 0" class="flex items-center justify-center">
+        <Loader2 class="animate-spin" />
       </div>
       <div v-else class="flex flex-col items-center justify-center py-8 text-gray-400 dark:text-gray-200">
         <ClipboardListIcon />
