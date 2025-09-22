@@ -1,1 +1,0 @@
-ALTER TABLE `menu` ADD `image` text;

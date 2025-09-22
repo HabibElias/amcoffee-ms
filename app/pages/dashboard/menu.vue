@@ -10,7 +10,7 @@ const menuStore = useMenuStore();
   </div>
   <div v-else class="relative">
     <!-- header -->
-    <div class="flex items-center justify-between mb-6 sticky py-3 top-30 z-20">
+    <div class="flex items-center justify-between mb-6 sticky py-3 top-20 z-20 bg-background">
       <span class="text-2xl">Menu</span>
 
       <AppAddMenuDialog />

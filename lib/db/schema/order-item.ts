@@ -1,3 +1,6 @@
+import type { InferSelectModel } from "drizzle-orm";
+
+import { relations } from "drizzle-orm";
 import { int, sqliteTable } from "drizzle-orm/sqlite-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -25,3 +28,12 @@ export const orderItemSchema = createInsertSchema(orderItem)
 export const insertOrderItemSchema = z.object({
   orderItems: z.array(orderItemSchema),
 });
+
+export const orderItemRelations = relations(orderItem, ({ one }) => ({
+  orderItems: one(order, {
+    fields: [orderItem.orderId],
+    references: [order.id],
+  }),
+}));
+
+export type OrderItem = InferSelectModel<typeof orderItem>;

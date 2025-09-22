@@ -4,7 +4,7 @@ import type { FetchError } from "ofetch";
 
 import { toTypedSchema } from "@vee-validate/zod";
 import { InsertMenuSchema } from "~~/lib/db/schema";
-import { File, Loader2, Pen } from "lucide-vue-next";
+import { Loader2, Pen, Save } from "lucide-vue-next";
 import { useForm } from "vee-validate";
 import { toast } from "vue-sonner";
 
@@ -196,7 +196,7 @@ const onSubmit = handleSubmit(async (values) => {
             type="submit"
             :disabled="loading"
           >
-            <File v-if="!loading" />
+            <Save v-if="!loading" />
             <Loader2 v-else class="animate-spin" />
             Save
           </Button>
