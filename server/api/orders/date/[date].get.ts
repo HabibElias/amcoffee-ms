@@ -1,6 +1,6 @@
 import db from "~~/lib/db";
 import { order } from "~~/lib/db/schema";
-import { and, gte, lt } from "drizzle-orm";
+import { and, desc, gte, lt } from "drizzle-orm";
 
 export default defineEventHandler(async (event) => {
   if (!event.context.user) {
@@ -30,6 +30,7 @@ export default defineEventHandler(async (event) => {
   const endOfThen = new Date(then.getFullYear(), then.getMonth(), then.getDate() + 1).getTime();
 
   const orderData = await db.query.order.findMany({
+    orderBy: [desc(order.orderDate)],
     with: {
       orderItem: true,
       user: true,
