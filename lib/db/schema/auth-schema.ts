@@ -1,4 +1,7 @@
+import { relations } from "drizzle-orm";
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
+
+import { order } from "./order";
 
 export const user = sqliteTable("user", {
   id: int().primaryKey({ autoIncrement: true }),
@@ -15,6 +18,13 @@ export const user = sqliteTable("user", {
     .$defaultFn(() => /* @__PURE__ */Date.now())
     .notNull(),
 });
+
+export const userRelations = relations(user, ({ one }) => ({
+  order: one(order, {
+    fields: [user.id],
+    references: [order.userId],
+  }),
+}));
 
 export const session = sqliteTable("session", {
   id: int().primaryKey({ autoIncrement: true }),

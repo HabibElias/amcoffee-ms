@@ -14,7 +14,7 @@ const menuStore = useMenuStore();
 
 <template>
   <Motion
-    class="bg-white dark:bg-[#141414] rounded-lg shadow-sm border-1 hover:shadow-md duration-200 p-6 flex flex-1 flex-col"
+    class="bg-white dark:bg-[#141414] rounded-lg shadow-xs border-1 hover:shadow-sm duration-200 p-6 flex flex-1 flex-col"
     :initial="{ opacity: 0, scale: 0.95 }"
     :animate="{ opacity: 1, scale: 1 }"
   >
