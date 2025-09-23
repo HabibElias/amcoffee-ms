@@ -23,5 +23,7 @@ logs
 .env.*
 !.env.example
 
-
+.swp
 local.db*
+
+pnpm-lock
