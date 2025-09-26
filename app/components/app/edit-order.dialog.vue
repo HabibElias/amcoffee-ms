@@ -27,9 +27,12 @@ import {
 
 const props = defineProps<{
   id: number;
+  datedOrder?: boolean;
 }>();
 
 const menuItems = useMenuStore().getMenuItems();
+const orderStore = useOrderStore();
+
 const loading = ref<boolean>(false);
 const orderItems = ref<{ quantity: number; menuId: string }[]>([]);
 const submitError = ref<string>("");
@@ -42,9 +45,15 @@ const orderValidationSchema = toTypedSchema(z.object({
 
 async function checkOrder() {
   loading.value = true;
-  const order = await $fetch(`/api/orders/${props.id}`);
+  const order = ref<Order>({} as Order);
+  if (props.datedOrder) {
+    order.value = orderStore.get_dated_orders.value.find(item => item.id === props.id) ?? {} as Order;
+  }
+  else {
+    order.value = orderStore.get_today_orders.value.find(item => item.id === props.id) ?? {} as Order;
+  }
   loading.value = false;
-  orderItems.value = (order.orderItem ?? []).map(item => ({
+  orderItems.value = (order.value.orderItem ?? []).map(item => ({
     quantity: item.quantity,
     menuId: item.menuId.toString(),
   }));

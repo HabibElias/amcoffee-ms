@@ -2,6 +2,10 @@
 import { Loader2, LucideChevronLeft } from "lucide-vue-next";
 import { toast } from "vue-sonner";
 
+const orderStore = useOrderStore();
+const pending = ref<boolean>(true);
+const orders = orderStore.get_dated_orders;
+
 const route = useRoute();
 
 // When accessing /posts/1, route.params.id will be 1
@@ -12,7 +16,18 @@ if (!Number.isInteger(date)) {
   toast.error("Date Param is not correct");
 }
 
-const { data: orders, pending } = useFetch(`/api/orders/date/${date}`);
+pending.value = true;
+try {
+  const fetched_dated_orders = await $fetch(`/api/orders/date/${date}`);
+
+  orderStore.set_dated_orders(fetched_dated_orders);
+}
+catch (error) {
+  console.error(error);
+}
+finally {
+  pending.value = false;
+}
 </script>
 
 <template>
@@ -33,7 +48,7 @@ const { data: orders, pending } = useFetch(`/api/orders/date/${date}`);
       </h3>
       <div class="space-y-2 mb-10">
         <div v-if="orders && orders.length > 0" class="grid grid-cols-1 md:grid-cols-2 mt-5 gap-5">
-          <AppOrderCard v-for="order in orders" :key="order.id" :order="order" />
+          <AppOrderCard v-for="order in orders" :key="order.id" :order="order" :dated-order="true" />
         </div>
         <div v-else class="dark:text-gray-400 text-[#8B5C2A]/70">
           No orders at {{ new Date(date).toLocaleDateString() }}.

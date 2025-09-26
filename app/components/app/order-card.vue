@@ -1,47 +1,12 @@
 <script setup lang="ts">
-import type { FetchError } from "ofetch";
-
-import { LazyAppEditOrderDialog } from "#components";
 import { Trash2 } from "lucide-vue-next";
-import { toast } from "vue-sonner";
 
 const props = defineProps<{
-  order: { id: number; userId: number; orderDate: number; user: {
-    id: number;
-    name: string;
-    email: string;
-    emailVerified: boolean;
-    image: string | null;
-    createdAt: number;
-    updatedAt: number;
-  } | null; orderItem: {
-    id: number;
-    createdAt: number;
-    updatedAt: number;
-    orderId: number;
-    menuId: number;
-    quantity: number;
-  }[]; };
+  order: Order;
+  datedOrder?: boolean;
 }>();
 
-async function handleDeleteOrder(id: number) {
-  toast.promise(
-    (async () => {
-      const deleted = await $fetch(`/api/orders/${id}`, {
-        method: "DELETE",
-      });
-        // eslint-disable-next-line no-console
-      console.log(deleted);
-    })(),
-    {
-      loading: "Loading...",
-      success: () => `Order has been deleted`,
-      error: (err: FetchError) => {
-        return err.statusText;
-      },
-    },
-  );
-}
+const orderStore = useOrderStore();
 
 const menuItems = useMenuStore().getMenuItems();
 </script>
@@ -72,18 +37,17 @@ const menuItems = useMenuStore().getMenuItems();
             const menuItem = menuItems?.find(menuItem => Number(item.menuId) === menuItem.id);
             return menuItem ? (menuItem.price * item.quantity).toLocaleString() : "-";
           })()
-        }}
+        }}$
       </span>
     </div>
     <div class="flex justify-end mt-4">
       <span class="text-base font-bold text-primary">
-        Total:&nbsp;
-        {{
+        Total: {{
           props.order.orderItem.reduce((sum, item) => {
             const menuItem = menuItems?.find(menuItem => Number(item.menuId) === menuItem.id);
             return sum + (menuItem ? menuItem.price * item.quantity : 0);
           }, 0).toLocaleString()
-        }}
+        }}$
       </span>
     </div>
     <div class="text-end text-xs">
@@ -94,11 +58,11 @@ const menuItems = useMenuStore().getMenuItems();
       <UiButton
         variant="outline" size="icon"
         class="btn-dark"
-        @click.prevent="handleDeleteOrder(props.order.id)"
+        @click.prevent="datedOrder ? orderStore.handleDeleteDatedOrder(props.order.id) : orderStore.handleDeleteOrder(props.order.id)"
       >
         <Trash2 />
       </UiButton>
-      <LazyAppEditOrderDialog :id="props.order.id" />
+      <AppEditOrderDialog :id="props.order.id" :dated-order="datedOrder" />
     </div>
   </div>
 </template>

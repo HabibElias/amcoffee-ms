@@ -33,6 +33,15 @@ export default defineEventHandler(async (event) => {
     ...item,
     orderId: createdOrder.id,
   }));
-  const createdItems = await db.insert(orderItem).values(orderItemsToInsert).returning();
-  return createdItems;
+  await db.insert(orderItem).values(orderItemsToInsert);
+
+  // Return the created order with relations
+  const orderWithRelations = await db.query.order.findFirst({
+    where: (o, { eq }) => eq(o.id, createdOrder.id),
+    with: {
+      user: true,
+      orderItem: true,
+    },
+  });
+  return orderWithRelations;
 });

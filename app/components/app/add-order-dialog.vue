@@ -4,7 +4,6 @@ import type { FetchError } from "ofetch";
 import { toTypedSchema } from "@vee-validate/zod";
 import { ClipboardListIcon, ListRestart, PlusIcon, Trash2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { toast } from "vue-sonner";
 import z from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -26,6 +25,8 @@ import {
 } from "@/components/ui/form";
 
 const menuStore = useMenuStore();
+const orderStore = useOrderStore();
+
 const menuItems = menuStore.getMenuItems();
 const loading = ref<boolean>(false);
 const orderItems = ref<{ quantity: number; menuId: string }[]>([]);
@@ -67,24 +68,8 @@ async function onAddSubmit() {
     submitError.value = "";
     open.value = false;
 
-    await toast.promise(
-      (async () => {
-        const inserted = await $fetch("/api/orders", {
-          method: "post",
-          body: {
-            orderItems: orderItems.value,
-          },
-        });
-        // eslint-disable-next-line no-console
-        console.log(inserted);
-        return inserted;
-      })(),
-      {
-        loading: "Loading...",
-        success: () => `order items has been added`,
-        error: () => "Error",
-      },
-    );
+    orderStore.handleAddOrder(orderItems.value);
+
     resetForm();
     resetOrder();
   }

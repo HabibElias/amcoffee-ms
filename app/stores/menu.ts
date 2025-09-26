@@ -1,22 +1,20 @@
 import type { Menu } from "@@/lib/db/schema/menu";
 
-import { createAuthClient } from "better-auth/vue";
 import { toast } from "vue-sonner";
-
-export const authClient = createAuthClient();
 
 export const useMenuStore = defineStore("menuItemStore", () => {
   const menuItems = ref<Menu[]>();
   const pending = ref<boolean>(false);
   async function init() {
-    pending.value = true;
-    const { data, error } = await useFetch<Menu[]>("/api/menu");
-    pending.value = false;
-    if (error.value) {
-      toast.error("Failed to fetch menu items");
-      return;
+    try {
+      pending.value = true;
+      const data = await $fetch<Menu[]>("/api/menu");
+      pending.value = false;
+      menuItems.value = data ?? [];
     }
-    menuItems.value = data.value ?? [];
+    catch (e) {
+      toast.error(`Failed to fetch menu items, ${e}`);
+    }
   }
 
   const getMenuItems = () => menuItems;
@@ -25,7 +23,10 @@ export const useMenuStore = defineStore("menuItemStore", () => {
   };
 
   const refreshMenuItems = async () => {
-    init();
+    // eslint-disable-next-line no-console
+    console.log("refreshing");
+
+    await init();
   };
 
   async function handleDeleteMenuItem(id: number) {
