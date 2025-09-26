@@ -1,17 +1,36 @@
 <script lang="ts" setup>
 import { Eye, Loader2 } from "lucide-vue-next";
 
-const { data: orders_by_date, pending } = useFetch("/api/orders");
-const { data: today_orders, pending: today_pending } = useFetch("/api/orders/today");
+const orderStore = useOrderStore();
+const today_orders = orderStore.get_today_orders;
+
+const pending = ref<boolean>(false);
 
 function formatDate(date: number) {
   const d = new Date(date);
   return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
 }
+
+const { data: orders_by_date, pending: dated_pending } = useFetch("/api/orders");
+
+onMounted(async () => {
+  pending.value = true;
+  try {
+    const fetched_today_orders = await $fetch("/api/orders/today");
+
+    orderStore.set_today_orders(fetched_today_orders);
+  }
+  catch (error) {
+    console.error(error);
+  }
+  finally {
+    pending.value = false;
+  }
+});
 </script>
 
 <template>
-  <div v-if="pending || today_pending" class="w-full h-[60%] flex items-center justify-center">
+  <div v-if="pending" class="w-full h-[60%] flex items-center justify-center">
     <Loader2 class="animate-spin" />
   </div>
   <div v-else>
@@ -45,7 +64,10 @@ function formatDate(date: number) {
         <h3 class="text-lg font-semibold mb-2">
           Orders by Date
         </h3>
-        <ul class="space-y-2">
+        <div v-if="dated_pending" class="w-full h-[60%] flex items-center justify-center">
+          <Loader2 class="animate-spin" />
+        </div>
+        <ul v-else class="space-y-2">
           <li v-for="order in orders_by_date" :key="order.date" class="flex justify-between items-center p-2 bg-gray-100 dark:bg-[#141414] rounded group hover:bg-gray-200 dark:hover:bg-[#1a1a1a]">
             <span class="flex items-center gap-2">
               <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center">

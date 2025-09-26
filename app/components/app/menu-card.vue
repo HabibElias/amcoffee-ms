@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Trash2 } from "lucide-vue-next";
+import { Coffee, CookieIcon, Trash2 } from "lucide-vue-next";
 
 const props = defineProps<{
   id: number;
@@ -28,9 +28,14 @@ const menuStore = useMenuStore();
         {{ props.name }}
       </h3>
     </div>
-    <p class="text-gray-400 mb-2">
-      {{ props.type }}
-    </p>
+    <div class="text-gray-400 mb-2 *:flex *:flex-row-reverse *:items-center *:justify-between">
+      <div v-if="props.type === 'food'">
+        <CookieIcon /> food
+      </div>
+      <div v-else>
+        <Coffee /> drink
+      </div>
+    </div>
     <span class="text-primary font-bold">{{ props.price }}$</span>
     <!-- btns -->
     <div class="w-full flex items-center justify-end gap-3">
