@@ -1,5 +1,5 @@
 import db from "~~/lib/db";
-import { insertOrderItemSchema, order, orderItem } from "~~/lib/db/schema";
+import { InsertWithdrawSchema, withdraw } from "~~/lib/db/schema";
 import { eq } from "drizzle-orm";
 
 export default defineEventHandler(async (event) => {
@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
     }));
   }
 
-  const result = await readValidatedBody(event, insertOrderItemSchema.safeParse);
+  const result = await readValidatedBody(event, InsertWithdrawSchema.safeParse);
 
   if (!result.success) {
     const statusMessage = result.error.issues.map(issue => `${issue.path.join("")}: ${issue.message}`).join("; ");
@@ -43,24 +43,14 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  // Delete old order items for this order
-  await db.delete(orderItem).where(eq(orderItem.orderId, id));
+  await db.update(withdraw).set(result.data).where(eq(withdraw.id, id));
 
-  // Insert new order items
-  const orderItemsToInsert = result.data.orderItems.map(item => ({
-    ...item,
-    orderId: id,
-  }));
-
-  await db.insert(orderItem).values(orderItemsToInsert);
-
-  const createdOrder = db.query.order.findFirst({
+  const fetched_updated = db.query.withdraw.findFirst({
     with: {
       user: true,
-      orderItem: true,
     },
-    where: eq(order.id, id),
+    where: eq(withdraw.id, id),
   });
 
-  return createdOrder;
+  return fetched_updated;
 });
