@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Trash2 } from "lucide-vue-next";
+import type { Order } from "@/stores/order";
 
 const props = defineProps<{
   order: Order;
@@ -55,13 +55,7 @@ const menuItems = useMenuStore().getMenuItems();
     </div>
     <!-- btns -->
     <div class="w-full flex items-center justify-start gap-3">
-      <UiButton
-        variant="outline" size="icon"
-        class="btn-dark"
-        @click.prevent="datedOrder ? orderStore.handleDeleteDatedOrder(props.order.id) : orderStore.handleDeleteOrder(props.order.id)"
-      >
-        <Trash2 />
-      </UiButton>
+      <AppConsentDialog :action="() => datedOrder ? orderStore.handleDeleteDatedOrder(props.order.id) : orderStore.handleDeleteOrder(props.order.id)" description="Are you sure you want to delete this order?" title="Delete Order" />
       <AppEditOrderDialog :id="props.order.id" :dated-order="datedOrder" />
     </div>
   </div>

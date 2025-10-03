@@ -2,6 +2,7 @@ import { relations } from "drizzle-orm";
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 import { order } from "./order";
+import { withdraw } from "./withdraw";
 
 export const user = sqliteTable("user", {
   id: int().primaryKey({ autoIncrement: true }),
@@ -23,6 +24,10 @@ export const userRelations = relations(user, ({ one }) => ({
   order: one(order, {
     fields: [user.id],
     references: [order.userId],
+  }),
+  withdraw: one(withdraw, {
+    fields: [user.id],
+    references: [withdraw.userId],
   }),
 }));
 

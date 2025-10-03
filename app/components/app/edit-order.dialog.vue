@@ -4,8 +4,9 @@ import type { FetchError } from "ofetch";
 import { toTypedSchema } from "@vee-validate/zod";
 import { ClipboardListIcon, ListRestart, Loader2, Pen, PlusIcon, Save, Trash2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { toast } from "vue-sonner";
 import z from "zod";
+
+import type { Order } from "@/stores/order";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -89,24 +90,8 @@ async function onAddSubmit() {
     submitError.value = "";
     open.value = false;
 
-    await toast.promise(
-      (async () => {
-        const inserted = await $fetch(`/api/orders/${props.id}`, {
-          method: "patch",
-          body: {
-            orderItems: orderItems.value,
-          },
-        });
-        // eslint-disable-next-line no-console
-        console.log(inserted);
-        return inserted;
-      })(),
-      {
-        loading: "Loading...",
-        success: () => `order items has been added`,
-        error: () => "Error",
-      },
-    );
+    orderStore.handleUpdateOrder(props.id, orderItems.value, props.datedOrder);
+
     resetForm();
     resetOrder();
   }
