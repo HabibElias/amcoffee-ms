@@ -66,12 +66,12 @@ async function onAddSubmit() {
   try {
     loading.value = true;
     submitError.value = "";
-    open.value = false;
 
     orderStore.handleAddOrder(orderItems.value);
 
     resetForm();
     resetOrder();
+    open.value = false;
   }
   catch (e) {
     const error = e as FetchError;
@@ -85,7 +85,7 @@ async function onAddSubmit() {
 </script>
 
 <template>
-  <Dialog class="font-[poppins]">
+  <Dialog :open="open" class="font-[poppins]">
     <DialogTrigger as-child>
       <UiButton>
         <PlusIcon />

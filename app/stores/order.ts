@@ -1,5 +1,6 @@
 import type { FetchError } from "ofetch";
 
+import { Save } from "lucide-vue-next";
 import { toast } from "vue-sonner";
 
 export type Order = {
@@ -25,15 +26,15 @@ export type Order = {
   }[];
 };
 
-export const useOrderStore = defineStore("OrdersStore", () => {
-  const todays_order = ref<Order[]>([]);
+export const useOrderStore = defineStore("ordersStore", () => {
+  const today_orders = ref<Order[]>([]);
   const dated_orders = ref<Order[]>([]);
 
   const set_today_orders = (orders: Order[]) => {
-    todays_order.value = orders;
+    today_orders.value = orders;
   };
 
-  const get_today_orders = computed(() => todays_order);
+  const get_today_orders = computed(() => today_orders);
 
   const set_dated_orders = (orders: Order[]) => {
     dated_orders.value = orders;
@@ -50,7 +51,7 @@ export const useOrderStore = defineStore("OrdersStore", () => {
             body: { orderItems },
           });
           // Add the new order only after successful response
-          todays_order.value = [inserted, ...todays_order.value];
+          today_orders.value = [inserted, ...today_orders.value];
           return inserted;
         })(),
         {
@@ -67,12 +68,13 @@ export const useOrderStore = defineStore("OrdersStore", () => {
   }
 
   async function handleDeleteOrder(id: number) {
-    const prevOrders = [...todays_order.value];
-    todays_order.value = todays_order.value.filter(order => order.id !== id);
+    const prevOrders = [...today_orders.value];
+    today_orders.value = today_orders.value.filter(order => order.id !== id);
 
     try {
       toast.promise(
-        await $fetch(`/api/orders/${id}`, { method: "DELETE" }),
+        await $fetch(`/api/orders/${id}`, { method: "DELETE" },
+        ),
         {
           loading: "Deleting...",
           success: () => "Order has been deleted",
@@ -83,7 +85,7 @@ export const useOrderStore = defineStore("OrdersStore", () => {
 
     catch (err: unknown) {
       // Revert state if deletion fails
-      todays_order.value = prevOrders;
+      today_orders.value = prevOrders;
       // Type guard to check if err is a FetchError
       if (err && typeof err === "object" && "statusText" in err) {
         toast.error((err as FetchError).statusText ?? "Unknown error");
@@ -116,8 +118,33 @@ export const useOrderStore = defineStore("OrdersStore", () => {
     }
   }
 
+  async function handleUpdateOrder(id: number, orderItems: { quantity: number; menuId: string }[], datedOrder: boolean) {
+    toast.promise(
+      (async () => {
+        const inserted = await $fetch(`/api/orders/${id}`, {
+          method: "patch",
+          body: {
+            orderItems,
+          },
+        });
+        if (datedOrder) {
+          set_dated_orders(dated_orders.value.map(withdraw => withdraw.id === id ? inserted : withdraw));
+        }
+        else {
+          set_today_orders(today_orders.value.map(withdraw => withdraw.id === id ? inserted : withdraw));
+        }
+      })(),
+      {
+        loading: "Loading...",
+        success: () => `Order items are up to date`,
+        error: () => "Error",
+        icon: Save,
+      },
+    );
+  }
+
   return {
-    todays_order,
+    todays_order: today_orders,
     dated_orders,
     set_today_orders,
     get_today_orders,
@@ -126,5 +153,6 @@ export const useOrderStore = defineStore("OrdersStore", () => {
     handleDeleteOrder,
     handleAddOrder,
     handleDeleteDatedOrder,
+    handleUpdateOrder,
   };
 });
