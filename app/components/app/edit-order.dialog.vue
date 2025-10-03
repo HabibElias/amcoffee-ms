@@ -2,8 +2,9 @@
 import type { FetchError } from "ofetch";
 
 import { toTypedSchema } from "@vee-validate/zod";
-import { ClipboardListIcon, ListRestart, PlusIcon, Trash2 } from "lucide-vue-next";
+import { ClipboardListIcon, ListRestart, Loader2, Pen, PlusIcon, Save, Trash2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
+import { toast } from "vue-sonner";
 import z from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -24,10 +25,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-const menuStore = useMenuStore();
+const props = defineProps<{
+  id: number;
+  datedOrder?: boolean;
+}>();
+
+const menuItems = useMenuStore().getMenuItems();
 const orderStore = useOrderStore();
 
-const menuItems = menuStore.getMenuItems();
 const loading = ref<boolean>(false);
 const orderItems = ref<{ quantity: number; menuId: string }[]>([]);
 const submitError = ref<string>("");
@@ -37,6 +42,22 @@ const orderValidationSchema = toTypedSchema(z.object({
   quantity: z.number({ message: "Field required" }).min(1, { message: "Minimum number 1" }),
   menuId: z.string({ message: "Field required" }).min(1, { message: "Field required" }),
 }));
+
+async function checkOrder() {
+  loading.value = true;
+  const order = ref<Order>({} as Order);
+  if (props.datedOrder) {
+    order.value = orderStore.get_dated_orders.value.find(item => item.id === props.id) ?? {} as Order;
+  }
+  else {
+    order.value = orderStore.get_today_orders.value.find(item => item.id === props.id) ?? {} as Order;
+  }
+  loading.value = false;
+  orderItems.value = (order.value.orderItem ?? []).map(item => ({
+    quantity: item.quantity,
+    menuId: item.menuId.toString(),
+  }));
+}
 
 const { handleSubmit, resetForm } = useForm({ validationSchema: orderValidationSchema });
 
@@ -68,8 +89,24 @@ async function onAddSubmit() {
     submitError.value = "";
     open.value = false;
 
-    orderStore.handleAddOrder(orderItems.value);
-
+    await toast.promise(
+      (async () => {
+        const inserted = await $fetch(`/api/orders/${props.id}`, {
+          method: "patch",
+          body: {
+            orderItems: orderItems.value,
+          },
+        });
+        // eslint-disable-next-line no-console
+        console.log(inserted);
+        return inserted;
+      })(),
+      {
+        loading: "Loading...",
+        success: () => `order items has been added`,
+        error: () => "Error",
+      },
+    );
     resetForm();
     resetOrder();
   }
@@ -87,9 +124,12 @@ async function onAddSubmit() {
 <template>
   <Dialog class="font-[poppins]">
     <DialogTrigger as-child>
-      <UiButton>
-        <PlusIcon />
-        Add Order
+      <UiButton
+        variant="outline" size="icon"
+        class="btn-dark"
+        @click.prevent="checkOrder"
+      >
+        <Pen />
       </UiButton>
     </DialogTrigger>
     <DialogContent class="sm:max-w-[425px] font-[poppins] font-light">
@@ -99,9 +139,9 @@ async function onAddSubmit() {
         </UiAlertDescription>
       </UiAlert>
       <DialogHeader>
-        <DialogTitle>Add Order</DialogTitle>
+        <DialogTitle>Edit Order</DialogTitle>
         <DialogDescription>
-          Add an order by adding menu items then clicking the add button.
+          Edit the order by adding an item or removing the existing ones.
         </DialogDescription>
       </DialogHeader>
       <form @submit.prevent="onSubmit">
@@ -215,14 +255,17 @@ async function onAddSubmit() {
           </span>
         </div>
       </div>
+      <div v-else-if="loading && orderItems.length <= 0" class="flex items-center justify-center">
+        <Loader2 class="animate-spin" />
+      </div>
       <div v-else class="flex flex-col items-center justify-center py-8 text-gray-400 dark:text-gray-200">
         <ClipboardListIcon />
         <span class="text-sm">No orders yet</span>
       </div>
       <DialogFooter>
         <Button @click.prevent="onAddSubmit">
-          <PlusIcon />
-          Add
+          <Save />
+          Save
         </Button>
       </DialogFooter>
     </DialogContent>

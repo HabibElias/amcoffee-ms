@@ -38,17 +38,17 @@ if (!menuStore.getMenuItems().value) {
   <div class="flex flex-col md:flex-row min-h-[70vh]">
     <!-- Sidebar -->
     <nav
-      class="w-full md:w-52 text-sm md:text-[1rem] md:min-h-100 relative dark:text-white shadow-[1px_2px_2px] dark:shadow-[#8B5C2A]/40 mt-4 md:sticky m-0 md:top-30 md:h-[70vh] gap-y-3 flex md:flex-col flex-row"
+      class="w-full md:w-52 text-sm md:text-[1rem] md:min-h-100 relative dark:text-white shadow-[1px_1px_1px] shadow-accent mt-4 md:sticky m-0 md:top-20 md:h-[70vh] gap-y-3 flex md:flex-col flex-row"
     >
       <NuxtLink
         v-for="link in links"
         :key="link.to"
         :to="link.to"
-        class="flex gap-1 relative px-4 group py-2 items-center font-semibold md:mb-0 md:mt-0 transition-colors border-l-4 bg-[#8B5C2A]/10 text-[#8B5C2A] hover:bg-[#583b1b]/10 border-l-[#8B5C2A] dark:bg-gray-900 dark:text-[#F3E9DD] dark:hover:bg-[#2d1a0a]/40 dark:border-l-[#F3E9DD]"
+        class="flex gap-1 relative px-4 group py-2 items-center font-semibold md:mb-0 md:mt-0 transition-colors border-t-4 md:border-t-0 md:border-l-4 bg-[#8B5C2A]/10 text-[#8B5C2A] hover:bg-[#583b1b]/10 border-[#8B5C2A] dark:bg-gray-900 dark:text-[#F3E9DD] dark:hover:bg-[#2d1a0a]/40 dark:border-l-[#F3E9DD]"
         :class="[
           link.isActive(route)
             ? ''
-            : 'border-l-transparent bg-transparent text-[#8B5C2A] dark:text-[#F3E9DD] dark:bg-transparent dark:border-l-transparent',
+            : 'border-l-transparent border-t-transparent bg-transparent text-[#8B5C2A] dark:text-[#F3E9DD] dark:bg-transparent dark:border-l-transparent dark:border-t-transparent',
         ]"
       >
         <Icon :name="link.icon" size="24" />

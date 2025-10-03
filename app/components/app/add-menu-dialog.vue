@@ -59,6 +59,7 @@ const onSubmit = handleSubmit(async (values) => {
         });
         // eslint-disable-next-line no-console
         console.log(inserted);
+        menuStore.refreshMenuItems();
         return inserted;
       })(),
       {
@@ -67,7 +68,6 @@ const onSubmit = handleSubmit(async (values) => {
         error: () => "Error",
       },
     );
-    menuStore.refreshMenuItems();
   }
   catch (e) {
     const error = e as FetchError;

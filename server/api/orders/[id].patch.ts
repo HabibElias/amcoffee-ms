@@ -1,5 +1,6 @@
 import db from "~~/lib/db";
-import { insertOrderItemSchema, order, orderItem } from "~~/lib/db/schema";
+import { insertOrderItemSchema, orderItem } from "~~/lib/db/schema";
+import { eq } from "drizzle-orm";
 
 export default defineEventHandler(async (event) => {
   if (!event.context.user) {
@@ -26,22 +27,31 @@ export default defineEventHandler(async (event) => {
     }));
   }
 
-  const [createdOrder] = await db.insert(order).values({ userId: event.context.user.id }).returning();
+  if (!event.context.params || typeof event.context.params.id === "undefined") {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Missing menu ID parameter",
+    });
+  }
 
-  // Insert all order items
+  const id = Number.parseInt(event.context.params.id) as number;
+
+  if (!Number.isInteger(id)) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "ID should be an integer",
+    });
+  }
+
+  // Delete old order items for this order
+  await db.delete(orderItem).where(eq(orderItem.orderId, id));
+
+  // Insert new order items
   const orderItemsToInsert = result.data.orderItems.map(item => ({
     ...item,
-    orderId: createdOrder.id,
+    orderId: id,
   }));
-  await db.insert(orderItem).values(orderItemsToInsert);
 
-  // Return the created order with relations
-  const orderWithRelations = await db.query.order.findFirst({
-    where: (o, { eq }) => eq(o.id, createdOrder.id),
-    with: {
-      user: true,
-      orderItem: true,
-    },
-  });
-  return orderWithRelations;
+  const createdItems = await db.insert(orderItem).values(orderItemsToInsert).returning();
+  return createdItems;
 });

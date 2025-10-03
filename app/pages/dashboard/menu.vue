@@ -2,6 +2,23 @@
 import { Loader2 } from "lucide-vue-next";
 
 const menuStore = useMenuStore();
+
+const menuItems = menuStore.getMenuItems();
+
+const menu_filter = ref<"all" | "food" | "drink">("all");
+const menu_search = ref("");
+
+const filtered_menuItems = computed(() => {
+  let items = menuItems.value;
+  if (menu_filter.value !== "all") {
+    items = items?.filter(item => item.type === menu_filter.value);
+  }
+  if (menu_search.value.trim()) {
+    const searchLower = menu_search.value.trim().toLowerCase();
+    items = items?.filter(item => item.name.toLowerCase().includes(searchLower));
+  }
+  return items;
+});
 </script>
 
 <template>
@@ -10,18 +27,37 @@ const menuStore = useMenuStore();
   </div>
   <div v-else class="relative">
     <!-- header -->
-    <div class="flex items-center justify-between mb-6 sticky py-3 top-30 z-20">
+    <div class="flex items-center justify-between mb-6 sticky py-3 top-20 z-20 bg-background">
       <span class="text-2xl">Menu</span>
 
       <AppAddMenuDialog />
     </div>
     <div class="mt-3">
+      <div class="flex flex-col md:flex-row gap-2 mb-4">
+        <select v-model="menu_filter" class="border rounded px-3 py-2 bg-background text-sm">
+          <option value="all">
+            All
+          </option>
+          <option value="food">
+            Food
+          </option>
+          <option value="drink">
+            Drink
+          </option>
+        </select>
+        <UiInput
+          v-model="menu_search"
+          type="text"
+          placeholder="Search menu by name..."
+          class="border rounded px-3 py-2 flex-1 bg-background text-base"
+        />
+      </div>
       <div
-        v-if="menuStore.getMenuItems().value && menuStore.getMenuItems().value!.length > 0"
+        v-if="filtered_menuItems && filtered_menuItems.length > 0"
         class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
       >
         <AppMenuCard
-          v-for="item in menuStore.getMenuItems().value"
+          v-for="item in filtered_menuItems"
           :key="item.id"
           v-bind="item"
         />
