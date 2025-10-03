@@ -24,33 +24,43 @@ const withdrawStore = useWithdrawStore();
 </script>
 
 <template>
-  <div class="bg-white dark:bg-[#1a1a1a] rounded-xl shadow-xs p-6 mb-6 border border-gray-200 dark:border-[#222]">
-    <div class="flex items-center justify-between mb-4">
-      <div>
-        <span class="font-semibold text-base text-primary">
-          {{ props.withdraw.user?.name }}<br>
-          <span class="text-xs text-gray-500 dark:text-gray-300">{{ props.withdraw.user?.email }}</span>
-        </span>
+  <Motion
+    class="bg-white dark:bg-[#141414] rounded-lg shadow-xs border-1 hover:shadow-sm duration-200 p-6 flex flex-1 flex-col mb-6"
+    :initial="{ opacity: 0, scale: 0.95 }"
+    :animate="{ opacity: 1, scale: 1 }"
+  >
+    <div class="flex flex-col items-start mb-2">
+      <div class="flex items-center gap-3 mb-3">
+        <div>
+          <h3 class="text-lg font-semibold">
+            {{ props.withdraw.user?.name || 'Unknown User' }}
+          </h3>
+          <div class="text-xs text-gray-500 dark:text-gray-400">
+            {{ props.withdraw.user?.email }}
+          </div>
+        </div>
       </div>
-      <span class="bg-accent-foreground text-accent text-xs px-3 py-1 rounded-full">
-        #{{ props.withdraw.id }}
-      </span>
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-primary font-bold text-xl">-${{ props.withdraw.amount }}</span>
+        <span class="bg-primary/10 text-primary text-xs px-2 py-0.5 rounded font-mono tracking-wider">#{{ props.withdraw.id }}</span>
+      </div>
+      <div class="text-xs text-gray-400 dark:text-gray-500 mb-1">
+        {{ new Date(props.withdraw.createdAt).toLocaleDateString() }}
+      </div>
     </div>
-    <div class="flex py-5 items-center justify-between gap-4 text-bg font-semibold text-red-500 dark:text-red-300 mb-2">
-      <span class="text-4xl">-${{ props.withdraw.amount }}</span>
+    <div class="mb-3 px-2 py-2 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-100 dark:border-gray-800">
+      <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">
+        Description
+      </div>
+      <span class="text-sm text-gray-700 dark:text-gray-200">{{ props.withdraw.description }}</span>
     </div>
-    <div>
-      <div>Description</div>
-      <span>{{ props.withdraw.description }}</span>
-    </div>
-    <!-- btns -->
-    <div class="w-full flex items-center justify-end gap-3">
+    <div class="w-full flex items-center justify-end gap-3 mt-2">
       <AppConsentDialog
         title="Delete Withdraw"
-        description="Are you sure you want to delete this withdraw log"
+        description="Are you sure you want to delete this withdraw log?"
         :action="() => datedWithdraw ? withdrawStore.handleDeleteDatedWithdraw(props.withdraw.id) : withdrawStore.handleDeleteWithdraw(props.withdraw.id)"
       />
       <AppEditWithdrawDialog :id="props.withdraw.id" :dated-withdraw="datedWithdraw" />
     </div>
-  </div>
+  </Motion>
 </template>
