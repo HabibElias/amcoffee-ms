@@ -12,6 +12,21 @@ export default defineEventHandler(async (event) => {
       await sendRedirect(event, "/", 302);
     }
   }
+  if (event.path.startsWith("/menu")) {
+    if (!session?.user) {
+      await sendRedirect(event, "/", 302);
+    }
+  }
+  if (event.path.startsWith("/order")) {
+    if (!session?.user) {
+      await sendRedirect(event, "/", 302);
+    }
+  }
+  if (event.path.startsWith("/withdraw")) {
+    if (!session?.user) {
+      await sendRedirect(event, "/", 302);
+    }
+  }
   if (event.path.startsWith("/settings")) {
     if (!session?.user) {
       await sendRedirect(event, "/", 302);

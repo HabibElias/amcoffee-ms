@@ -47,10 +47,11 @@ const authStore = useAuthStore();
       <div class="pt-4 flex justify-end">
         <NuxtLink
           to="/sign-out"
-          class="px-4 py-2 text-xs dark:text-black flex items-center justify-center gap-2 cursor-pointer font-medium rounded bg-red-200 text-white hover:bg-red-400 transition"
         >
-          <Icon name="ri:logout-box-line" size="18" />
-          Logout
+          <UiButton variant="destructive">
+            <Icon name="ri:logout-box-line" size="18" />
+            Logout
+          </UiButton>
         </NuxtLink>
       </div>
     </HoverCardContent>

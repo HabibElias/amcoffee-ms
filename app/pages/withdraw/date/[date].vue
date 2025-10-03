@@ -32,7 +32,7 @@ finally {
 
 <template>
   <div class="p-4">
-    <UiButton class="mb-4" @click="navigateTo('/dashboard/withdraw')">
+    <UiButton class="mb-4" @click="navigateTo('/withdraw')">
       <LucideChevronLeft />
       Back to Withdraws
     </UiButton>

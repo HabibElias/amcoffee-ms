@@ -85,7 +85,7 @@ const onSubmit = handleSubmit(async (values) => {
     <DialogTrigger as-child>
       <UiButton>
         <PlusIcon />
-        Add an Item
+        Add Menu Item
       </UiButton>
     </DialogTrigger>
     <DialogContent class="sm:max-w-[425px] font-[poppins]">

@@ -32,7 +32,7 @@ finally {
 
 <template>
   <div class="p-4">
-    <UiButton class="mb-4" @click="navigateTo('/dashboard/order')">
+    <UiButton class="mb-4" @click="navigateTo('/order')">
       <LucideChevronLeft />
       Back to Orders
     </UiButton>
