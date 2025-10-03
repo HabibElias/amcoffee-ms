@@ -27,7 +27,7 @@ const filtered_menuItems = computed(() => {
   </div>
   <div v-else class="relative">
     <!-- header -->
-    <div class="flex items-center justify-between mb-6 sticky py-3 top-20 z-20 bg-background">
+    <div class="flex items-center justify-between mb-6 top-31 sticky py-3 md:top-20 z-20 bg-background">
       <span class="text-2xl">Menu</span>
 
       <AppAddMenuDialog />

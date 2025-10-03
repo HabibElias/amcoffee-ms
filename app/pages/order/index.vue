@@ -35,7 +35,7 @@ onMounted(async () => {
   </div>
   <div v-else>
     <!-- header -->
-    <div class="flex items-center justify-between mb-6 sticky top-20 py-5 z-20 bg-background">
+    <div class="flex items-center justify-between mb-6 sticky top-31 md:top-20 py-5 z-20 bg-background">
       <span class="text-2xl">Orders</span>
       <AppAddOrderDialog />
     </div>
@@ -71,7 +71,7 @@ onMounted(async () => {
           <li v-for="order in orders_by_date" :key="order.date" class="flex justify-between items-center p-2 bg-gray-100 dark:bg-[#141414] rounded group hover:bg-gray-200 dark:hover:bg-[#1a1a1a]">
             <span class="flex items-center gap-2">
               <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center">
-                <UiButton size="icon" variant="outline" @click="navigateTo(`/dashboard/order/date/${order.date}`)">
+                <UiButton size="icon" variant="outline" @click="navigateTo(`/order/date/${order.date}`)">
                   <Eye />
                 </UiButton>
               </span>

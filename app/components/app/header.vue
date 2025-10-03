@@ -20,7 +20,7 @@ const authStore = useAuthStore();
     <nav class="flex items-center gap-10">
       <AppToggleColor />
       <UserAvatar v-if="!authStore.loading && authStore.user" />
-      <AuthButton v-else />
+      <AuthButton v-else :on-nav="true" />
     </nav>
   </header>
 </template>

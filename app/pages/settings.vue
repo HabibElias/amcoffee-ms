@@ -1,3 +1,5 @@
 <template>
-  <div>hi form settings</div>
+  <NuxtLayout name="custom">
+    <NuxtPage />
+  </NuxtLayout>
 </template>
